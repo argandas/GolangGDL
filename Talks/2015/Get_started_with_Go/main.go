@@ -4,12 +4,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/nf/reddit" // HL
+	"github.com/argandas/wordpress" // HL
 	"log"
 )
 
 func main() {
-	items, err := reddit.Get("golang") // HL
+	items, err := wordpress.Get("en.blog.wordpress.com") // HL
 	if err != nil {
 		log.Fatal(err)
 	}

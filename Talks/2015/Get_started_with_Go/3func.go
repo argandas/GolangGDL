@@ -11,30 +11,26 @@ import (
 )
 
 func main() {
-	items, err := Get("golang") // HL
+	posts, err := Get("en.blog.wordpress.com") // HL
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, item := range items { // HL
-		fmt.Println(item.Title)
+	for _, post := range posts { // HL
+		fmt.Println(post.Title)
 	}
 }
 
-type Response struct {
-	Data struct {
-		Children []struct {
-			Data Item
-		}
-	}
-}
-
-type Item struct {
+type Post struct {
 	Title string
 	URL   string
 }
 
-func Get(reddit string) ([]Item, error) {
-	url := fmt.Sprintf("http://reddit.com/r/%s.json", reddit) // HLurl
+type Response struct {
+	Posts []Post
+}
+
+func Get(wp string) ([]Post, error) {
+	url := fmt.Sprintf("https://public-api.wordpress.com/rest/v1.1/sites/%s/posts/?number=10",wp) // HLurl
 	resp, err := http.Get(url)                                // HLget
 	if err != nil {
 		return nil, err // HLreturn
@@ -48,9 +44,5 @@ func Get(reddit string) ([]Item, error) {
 	if err != nil {
 		return nil, err // HLreturn
 	}
-	items := make([]Item, len(r.Data.Children)) // HLprepare
-	for i, child := range r.Data.Children {     // HLconvert
-		items[i] = child.Data // HLconvert
-	} // HLconvert
-	return items, nil // HLreturn
+	return r.Posts, nil // HLprepare
 }

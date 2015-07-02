@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	resp, err := http.Get("http://reddit.com/r/golang.json")
+	resp, err := http.Get("https://public-api.wordpress.com/rest/v1.1/sites/en.blog.wordpress.com/posts/?number=10")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -22,20 +22,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, child := range r.Data.Children {
-		fmt.Println(child.Data.Title)
+	for _, post := range r.Posts {
+		fmt.Println(post.Title)
 	}
-}
-
-type Item struct {
-	Title string
-	URL   string
 }
 
 type Response struct {
-	Data struct {
-		Children []struct {
-			Data Item
-		}
-	}
+	Posts []Post
+}
+
+type Post struct {
+	Title string
+	URL   string
 }
