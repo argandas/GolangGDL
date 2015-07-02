@@ -2,11 +2,9 @@
 
 Get started with Go
 
-Andrew Gerrand
-Google
-https://plus.google.com/106356964679457436995
-@enneff
-http://golang.org
+Hugo Arganda
+Dextra Technologies
+@argandas
 
 * Background
 
@@ -58,7 +56,7 @@ Go is a new, general-purpose programming language.
 
 Put this code into `hello.go`:
 
-.code tutorial/hello.go
+.play Get_started_with_Go/hello.go
 
 # Now, from a command prompt, run `go run hello.go`. This will build your program, storing the executable binary in a temporary location, and run it. You should see the greeting printed to the console.
 
@@ -175,7 +173,7 @@ This is where you will put your Go source files.
 
 This program makes an HTTP request to the Reddit API and copies its response to standard output.  Put this in a file named `main.go` inside your `reddit` directory.
 
-.code tutorial/1get.go
+.play Get_started_with_Go/1get.go
 
 # If you run it you should see a blob of JSON data, or an error message if something goes wrong.
 
@@ -186,7 +184,7 @@ This program makes an HTTP request to the Reddit API and copies its response to 
 
 All Go code belongs to a package.
 
-.code tutorial/1get.go /package/
+.play Get_started_with_Go/1get.go /package/
 
 Go programs begin with function `main` inside package `main`.
 
@@ -195,7 +193,7 @@ Go programs begin with function `main` inside package `main`.
 
 The import declaration specifies the file's dependencies.
 
-.code tutorial/1get.go /import/,/\)/
+.play Get_started_with_Go/1get.go /import/,/\)/
 
 Each string is an import path. It tells the Go tools where to find the package.
 
@@ -204,13 +202,13 @@ These packages are all from the Go standard library.
 
 * Make an HTTP request: function declaration
 
-.code tutorial/1get.go /func.main/,/^}/ HLfunc
+.play Get_started_with_Go/1get.go /func.main/,/^}/ HLfunc
 
 This is a function declaration. The main function takes no arguments and has no return values.
 
 * Make an HTTP request: http.Get
 
-.code tutorial/1get.go /func.main/,/^}/ HLget
+.play Get_started_with_Go/1get.go /func.main/,/^}/ HLget
 
 Call the `Get` function from the `http` package, passing the URL of the Reddit API as its only argument.
 
@@ -219,7 +217,7 @@ Declare two variables (`resp` and `err`) and give them the return values of the 
 
 * Make an HTTP request: error handling
 
-.code tutorial/1get.go /func.main/,/^}/ HLerr
+.play Get_started_with_Go/1get.go /func.main/,/^}/ HLerr
 
 Compare `err` against `nil`, the zero-value for the built-in `error` type.
 
@@ -232,7 +230,7 @@ If not, call the `log.Fatal` function to print the error message and exit the pr
 
 * Make an HTTP request: check status
 
-.code tutorial/1get.go /func.main/,/^}/ HLstatus
+.play Get_started_with_Go/1get.go /func.main/,/^}/ HLstatus
 
 Test that the HTTP server returned a "200 OK" response.
 
@@ -241,7 +239,7 @@ If not, bail, printing the HTTP status message ("500 Internal Server Error", for
 
 * Make an HTTP request: copy
 
-.code tutorial/1get.go /func.main/,/^}/ HLcopy
+.play Get_started_with_Go/1get.go /func.main/,/^}/ HLcopy
 
 Use `io.Copy` to copy the HTTP response body  to standard output (`os.Stdout`).
 
@@ -271,18 +269,18 @@ The Reddit API returns JSON data like this:
 
 Go's `json` package decodes JSON-encoded data into native Go data structures. To decode the API response, declare some types that reflect the structure of the JSON data:
 
-.code tutorial/2json.go /type.Item/,$
+.play Get_started_with_Go/2json.go /type.Item/,$
 
 
 * Decode the response
 
 Instead of copying the HTTP response body to standard output
 
-.code tutorial/1get.go /io.Copy/
+.play Get_started_with_Go/1get.go /io.Copy/
 
 we use the json package to decode the response into our Response data structure.
 
-.code tutorial/2json.go /new.Response/,/json.NewDecoder/
+.play Get_started_with_Go/2json.go /new.Response/,/json.NewDecoder/
 
 Initialize a new `Response` value, store a pointer to it in the new variable `r`.
 
@@ -314,31 +312,31 @@ What if we want to check several subreddits? Or share this functionality with an
 
 Create a function named `Get` that takes the name of subreddit, makes the API call, and returns the items from that subreddit.
 
-.code tutorial/3func.go /func.Get/
+.play Get_started_with_Go/3func.go /func.Get/
 
 `Get` takes a string, `reddit`, and returns a slice of `Item` and an `error` value.
 
 * Get: construct the URL
 
-.code tutorial/3func.go /func.Get/,/^}/ HLurl
+.play Get_started_with_Go/3func.go /func.Get/,/^}/ HLurl
 
 Use `fmt.Sprintf` to construct the request URL from the provided `reddit` string.
 
 * Get: return
 
-.code tutorial/3func.go /func.Get/,/^}/ HLreturn
+.play Get_started_with_Go/3func.go /func.Get/,/^}/ HLreturn
 
 Exiting the function, return a nil slice and a non-nil error value, or vice versa.
 
 * Get: making an error
 
-.code tutorial/3func.go /func.Get/,/^}/ HLerrors
+.play Get_started_with_Go/3func.go /func.Get/,/^}/ HLerrors
 
 The response's `Status` field is just a string; use the `errors.New` function to convert it to an `error` value.
 
 * Get: defer clean-up work
 
-.code tutorial/3func.go /func.Get/,/^}/ HLclose
+.play Get_started_with_Go/3func.go /func.Get/,/^}/ HLclose
 
 Defer a call to the response body's `Close` method, to guarantee that we clean up after the HTTP request. The call will be executed after the function returns.
 
@@ -348,13 +346,13 @@ Defer a call to the response body's `Close` method, to guarantee that we clean u
 
 * Get: prepare the response
 
-.code tutorial/3func.go /func.Get/,/^}/ HLprepare
+.play Get_started_with_Go/3func.go /func.Get/,/^}/ HLprepare
 
 Use the make function to allocate an `Item` slice big enough to store the response data.
 
 * Get: convert the response
 
-.code tutorial/3func.go /func.Get/,/^}/ HLconvert
+.play Get_started_with_Go/3func.go /func.Get/,/^}/ HLconvert
 
 Iterate over the response's `Children` slice, assigning each child's `Data` element to the corresponding element in the items slice.
 
@@ -362,7 +360,7 @@ Iterate over the response's `Children` slice, assigning each child's `Data` elem
 
 In the `main` function, replace the http request and JSON decoding code with a single call to `Get`.
 
-.code tutorial/3func.go /func.main/,/^}/
+.play Get_started_with_Go/3func.go /func.main/,/^}/
 
 The print loop becomes clearer, too.
 
@@ -409,7 +407,7 @@ Let's go a step further. One way to judge how interesting a link might be is by 
 
 Update the `Item` type to include a `Comments` field:
 
-.code tutorial/4method.go /type.Item/,/^}/
+.play Get_started_with_Go/4method.go /type.Item/,/^}/
 
 The new `Comments` field has a "struct tag", a string that annotates the field. Go code can use the `reflect` package to inspect this information at runtime.
 
@@ -419,7 +417,7 @@ This tag, `json:"num_comments"`, tells the `json` package to decode the `"num_co
 
 Now the `String` method can be a little more complex:
 
-.code tutorial/4method.go /func..i.Item..String/,/^}/
+.play Get_started_with_Go/4method.go /func..i.Item..String/,/^}/
 
 Observe that, unlike some languages, Go's switch statements do not fall through by default.
 
@@ -496,7 +494,7 @@ The `reddit.go` file now looks like this:
 
 Edit the `geddit/main.go` file to remove the `Get`, `Item`, and `Response` declarations, import the `reddit` package, and use the `reddit.` prefix before the `Get` invocation:
 
-.code tutorial/main.go
+.play Get_started_with_Go/main.go
 
 
 * Documentation
@@ -542,15 +540,15 @@ In Go, top-level declarations beginning with an uppercase letter are "exported" 
 
 To document the remaining visible names, add a comment directly above their declarations:
 
-.code tutorial/reddit/reddit.go /Item.describes/,/type/
+.play Get_started_with_Go/reddit/reddit.go /Item.describes/,/type/
 
-.code tutorial/reddit/reddit.go /Get.fetches/,/func/
+.play Get_started_with_Go/reddit/reddit.go /Get.fetches/,/func/
 
 # It is the convention to begin godoc comments with the noun they describe. This allows the text to be displayed in a variety of contexts, not necessarily alongside the declaration itself.
 
 Most importantly, document the package itself by adding a comment to the package clause:
 
-.code tutorial/reddit/reddit.go /Package.reddit/,/package.reddit/
+.play Get_started_with_Go/reddit/reddit.go /Package.reddit/,/package.reddit/
 
 Don't worry about documenting the `String` method, as all Go programmers should be familiar with it and its purpose.
 
@@ -641,3 +639,4 @@ Documentation and articles:
 Standard library reference:
 
 .link http://golang.org/pkg
+
