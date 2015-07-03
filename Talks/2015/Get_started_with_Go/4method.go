@@ -33,19 +33,19 @@ type Post struct {
 func (p Post) String() string {
 	numLikes := ""
 	switch p.Likes {
-		case 0:
-			// nothing
-		case 1:
-			numLikes = " (1 like)"
-		default:
-			numLikes = fmt.Sprintf(" (%d likes)", p.Likes)
+	case 0:
+		// nothing
+	case 1:
+		numLikes = " (1 like)"
+	default:
+		numLikes = fmt.Sprintf(" (%d likes)", p.Likes)
 	}
 	return fmt.Sprintf("\r\n%s%s\n[%s]", p.Title, numLikes, p.URL)
 }
 
 func Get(wp string) ([]Post, error) {
 	url := fmt.Sprintf("https://public-api.wordpress.com/rest/v1.1/sites/%s/posts/?number=10", wp) // HLurl
-	resp, err := http.Get(url)                                // HLget
+	resp, err := http.Get(url)                                                                     // HLget
 	if err != nil {
 		return nil, err // HLreturn
 	}

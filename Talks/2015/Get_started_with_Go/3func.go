@@ -30,8 +30,8 @@ type Response struct {
 }
 
 func Get(wp string) ([]Post, error) {
-	url := fmt.Sprintf("https://public-api.wordpress.com/rest/v1.1/sites/%s/posts/?number=10",wp) // HLurl
-	resp, err := http.Get(url)                                // HLget
+	url := fmt.Sprintf("https://public-api.wordpress.com/rest/v1.1/sites/%s/posts/?number=10", wp) // HLurl
+	resp, err := http.Get(url)                                                                     // HLget
 	if err != nil {
 		return nil, err // HLreturn
 	}
