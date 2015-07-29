@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	items, err := Get("en.blog.wordpress.com") // HL
+	items, err := Get("argandas") // HL
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -20,32 +20,31 @@ func main() {
 	}
 }
 
-type Response struct {
-	Posts []Post
-}
+type Response []Repo
 
-type Post struct {
-	Title string
+type Repo struct {
+	Name string
+	Description string
 	URL   string
-	Likes int `json:"like_count"`
+	Stars int `json:"stargazers_count"`
 }
 
-func (p Post) String() string {
-	numLikes := ""
-	switch p.Likes {
+func (r Repo) String() string {
+	numStars := ""
+	switch r.Stars {
 	case 0:
 		// nothing
 	case 1:
-		numLikes = " (1 like)"
+		numStars = " (1 star)"
 	default:
-		numLikes = fmt.Sprintf(" (%d likes)", p.Likes)
+		numStars = fmt.Sprintf(" (%d stars)", r.Stars)
 	}
-	return fmt.Sprintf("\r\n%s%s\n[%s]", p.Title, numLikes, p.URL)
+	return fmt.Sprintf("\r\n%s\r\n%s%s\n[%s]", r.Name, r.Description, numStars, r.URL)
 }
 
-func Get(wp string) ([]Post, error) {
-	url := fmt.Sprintf("https://public-api.wordpress.com/rest/v1.1/sites/%s/posts/?number=10", wp) // HLurl
-	resp, err := http.Get(url)                                                                     // HLget
+func Get(user string) ([]Repo, error) {
+	url := fmt.Sprintf("https://api.github.com/users/%s/repos", user) // HLurl
+	resp, err := http.Get(url)   // HLget
 	if err != nil {
 		return nil, err // HLreturn
 	}
@@ -53,10 +52,10 @@ func Get(wp string) ([]Post, error) {
 	if resp.StatusCode != http.StatusOK { // HLstatus
 		return nil, errors.New(resp.Status) // HLerrors
 	}
-	r := new(Response)                         // HLdecode
-	err = json.NewDecoder(resp.Body).Decode(r) // HLdecode
+	r := Response{}     // HLdecode
+	err = json.NewDecoder(resp.Body).Decode(&r) // HLdecode
 	if err != nil {
 		return nil, err // HLreturn
 	}
-	return r.Posts, nil // HLreturn
+	return r, nil // HLprepare
 }

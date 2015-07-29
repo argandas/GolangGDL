@@ -10,28 +10,27 @@ import (
 )
 
 func main() {
-	resp, err := http.Get("https://public-api.wordpress.com/rest/v1.1/sites/en.blog.wordpress.com/posts/?number=10")
+	resp, err := http.Get("https://api.github.com/users/argandas/repos")
 	if err != nil {
 		log.Fatal(err)
 	}
 	if resp.StatusCode != http.StatusOK {
 		log.Fatal(resp.Status)
 	}
-	r := new(Response)
-	err = json.NewDecoder(resp.Body).Decode(r)
+	// var r Response
+	r := Response{}
+	err = json.NewDecoder(resp.Body).Decode(&r)
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, post := range r.Posts {
-		fmt.Println(post.Title)
+	for _, repo := range r {
+		fmt.Println(repo.Name)
 	}
 }
 
-type Response struct {
-	Posts []Post
-}
+type Response []Repo
 
-type Post struct {
-	Title string
+type Repo struct {
+	Name string
 	URL   string
 }

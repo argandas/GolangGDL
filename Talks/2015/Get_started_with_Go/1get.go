@@ -10,7 +10,7 @@ import (
 )
 
 func main() { // HLfunc
-	resp, err := http.Get("https://public-api.wordpress.com/rest/v1.1/sites/en.blog.wordpress.com/posts/?number=10") // HLget
+	resp, err := http.Get("https://api.github.com/users/argandas/repos") // HLget
 	if err != nil {                                                                                                  // HLerr
 		log.Fatal(err) // HLerr
 	} // HLerr

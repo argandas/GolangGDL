@@ -3,7 +3,7 @@
 Get started with Go
 
 Hugo Arganda
-https://github.com/argandas
+about.me/argandas
 @argandas
 
 * About me
@@ -16,7 +16,11 @@ Joined Morey's test automation team around October 2014.
 
 Had no idea about what Go was until started working on it few months ago.
 
-I want to share what I have learned since.
+* Why I'm here?
+
+I want to share what I have learned, because I want to keep learning.
+
+.image Get_started_with_Go/gopherShare.jpg
 
 * Background
 
@@ -32,6 +36,12 @@ Go is a new, general-purpose programming language.
 - Simple
 - Productive
 
+# Go is an attempt to combine the ease of programming of an interpreted, dynamically typed language with the efficiency and safety of a statically typed, compiled language.
+
+# Statically typed programming languages do type checking (the process of verifying and enforcing the constraints of types) at compile-time as opposed to run-time. Dynamically typed programming languages do type checking at run-time as opposed to Compile-time.
+
+# Concurrent computing is a form of computing in which several computations are executing during overlapping time periods
+
 "Go is a wise, clean, insightful, fresh thinking approach to the greatest-hits subset of the well understood."
 - Michael T. Jones
 
@@ -45,7 +55,7 @@ Go is a new, general-purpose programming language.
 
 # Go was originally built by a team at Google, led by Robert Griesemer, Rob Pike, and Ken Thompson. In November 2010, Go was launched publically as an open source project. Since then, a team at Google and more than 250 contributors from the open source community continued to improve the Go language, libraries, and tools.
 
-# In March 2012, we announced Go 1, a version of the language and libraries that will be supported for years to come. 
+# In March 2012, Go 1 was announced, a version of the language and libraries that will be supported for years to come. 
 
 * Getting started
 
@@ -57,6 +67,8 @@ Go is a new, general-purpose programming language.
 - 32- and 64-bit x86 and ARM processors
 - Windows, Mac OS X, Linux, and FreeBSD
 - Other platforms may be supported by `gccgo`
+
+# Go compiler based on the GNU C Compiler
 
 # Go is available in binary form for Windows, Mac OS X, Linux, and FreeBSD running under 32 and 64-bit x86 processor architectures. To install Go on these systems, download the appropriate file from golang.org and either open the package installer (Windows or OS X) or extract the archive to /usr/local/go (Linux and FreeBSD).  
 
@@ -161,39 +173,36 @@ This builds an executable named `hello`, and installs it to the `bin` directory 
   $ $GOPATH/bin/hello
   Hello, fellow gopher
 
-
 * Less talk more doing
 
-* Our project: Wordpress API
+* Our project: Github API
 
-A command-line program that fetches and displays the latest posts from a Wordpress online blog.
-# (Wordpress is content management system very famous to make online blogs.)
+A command-line program that fetches and displays the repositories from a Github user.
 
 The program will:
-- make an HTTP request to the Wordpress REST API,
-- decode the JSON response into a Go data structure, and
-- print each link's title, URL, and number of likes.
+- make an HTTP request to the Github API,
+- decode the JSON response into a Go data structures, and
+- print each repository's title, URL, and number of stars.
 
-To get started, create directory inside your namespace called `wordpress`:
+To get started, create directory inside your namespace called `githubapi`:
 
   # Linux
-  $ mkdir $GOPATH/src/github.com/argandas/wordpress
+  $ mkdir $GOPATH/src/github.com/argandas/githubapi
   
   # Windows
-  > mkdir %GOPATH%\src\github.com\argandas\wordpress
+  > mkdir %GOPATH%\src\github.com\argandas\githubapi
   
 This is where you will put your Go source files.
 
 * Make an HTTP request
 
-This program makes an HTTP request to the Wordpress API and copies its response to standard output.  Put this in a file named `main.go` inside your `wordpress` directory.
+This program makes an HTTP request to the Github API and copies its response to standard output.  Put this in a file named `main.go` inside your `githubapi` directory.
 
 .code Get_started_with_Go/1get.go /func.main/,/^}/ 
 
 # If you run it you should see a blob of JSON data, or an error message if something goes wrong.
 
 # There's a lot going on here, so let's break it down. 
-
 
 * Make an HTTP request: package statement
 
@@ -225,9 +234,11 @@ This is a function declaration. The main function takes no arguments and has no 
 
 .code Get_started_with_Go/1get.go /func.main/,/^}/ HLget
 
-Call the `Get` function from the `http` package, passing the URL of the Wordpress API as its only argument.
+Call the `Get` function from the `http` package, passing the URL of the Github API as its only argument.
 
-Declare two variables (`resp` and `err`) and give them the return values of the function call. (Yes, Go functions can return multiple values.) The `Get` function returns `*http.Response` and an `error` values.
+Declare two variables (`resp` and `err`) and give them the return values of the function call. (Yes, Go functions can return multiple values.) 
+
+The `Get` function returns `*http.Response` and an `error` values.
 
 
 * Make an HTTP request: error handling
@@ -271,16 +282,19 @@ The `resp.Body` type implements `io.Reader` and `os.Stdout` implements `io.Write
 
 * Data structures
 
-The Wordpress API returns JSON data like this:
+The Github API returns JSON data like this:
 
-  {"posts": [
+  [
   	{
-  		"title": "New Theme: Libre",
-  		"url": "http://en.blog.wordpress.com/2015/07/02/libre/",
+  		"name": "GolangGDL",
+  		"url": "https://api.github.com/repos/argandas/GolangGDL",
   		...
   	},
   	...
-  ]}
+  ]
+
+# You can use a JSON viewer to help you undestand the API response
+# http://jsonviewer.stack.hu/
 
 * Data structures
 
@@ -296,23 +310,21 @@ Instead of copying the HTTP response body to standard output
 
 we use the json package to decode the response into our Response data structure.
 
-.code Get_started_with_Go/2json.go /new.Response/,/json.NewDecoder/
+.code Get_started_with_Go/2json.go /Response{}/,/json.NewDecoder/
 
-Initialize a new `Response` value, store a pointer to it in the new variable `r`.
+Initialize a `Response` variable `r`.
 
 Create a new `json.Decoder` object and decode the response body into `r`.
 
-As the decoder parses the JSON data it looks for corresponding fields of the same names in the `Response` struct. The array `"posts"` field of the top-level JSON object is decoded into the `Response` struct's `Posts` array field, and so on.
+The response is an array of repositories, as the decoder parses the JSON data it looks for corresponding fields of the same names in the `Repo` struct.
 
 * Print the data
 
-    for _, post := range r.Posts {
-      fmt.Println(post.Title)
-    }
+.code Get_started_with_Go/2json.go /range/,/}/
 
-Iterate over the `Posts` slice, assigning the slice value to `post` on each iteration.
+Iterate over the `Response` slice, assigning the slice value to `repo` on each iteration.
 
-The `Println` call prints the item's `Title` followed by a newline.
+The `Println` call prints the item's `Name` followed by a newline.
 
 * Tidying up
 
@@ -322,19 +334,19 @@ So far, all the action happens in the main function.
 
 As the program grows, structure and modularity become important.
 
-What if we want to check several blogs? Or share this functionality with another program?
+What if we want to check several users? Or share this functionality with another program?
 
-Create a function named `Get` that takes the url of the blog, makes the API call, and returns the posts from that blog.
+Create a function named `Get` that takes the url of the user, makes the API call, and returns the repos from that user.
 
 .code Get_started_with_Go/3func.go /func.Get/
 
-`Get` takes a string, `wp`, and returns a slice of `Post` and an `error` value.
+`Get` takes a string, `user`, and returns a slice of `Repo` and an `error` value.
 
 * Get: construct the URL
 
 .code Get_started_with_Go/3func.go /func.Get/,/^}/ HLurl
 
-Use `fmt.Sprintf` to construct the request URL from the provided `wordpress` string.
+Use `fmt.Sprintf` to construct the request URL from the provided `user` string.
 
 * Get: return
 
@@ -392,45 +404,45 @@ Any type that implements a `String() string` method is a `Stringer`, and the `fm
 
 A method declaration is just like a function declaration, but the receiver comes first.
 
-Here's a `String` method for the `Post` type that returns the title, a newline, and the URL:
+Here's a `String` method for the `Repo` type that returns the name, a newline, and the URL:
 
-  func (p Post) String() string {
-    return fmt.Sprintf("%s\n%s", p.Title, p.URL)
+  func (r Repo) String() string {
+    return fmt.Sprintf("%s\n%s", r.Name, r.URL)
   }
 
-To print the item we just pass it to Println, which uses the provided `String` method to format the `Post`.
+To print the item we just pass it to Println, which uses the provided `String` method to format the `Repo`.
 
-  fmt.Println(post)
+  fmt.Println(repo)
 
 
 * Richer formatting (1/3)
 
-Let's go a step further. One way to judge how interesting a link might be is by number of people who likes it. 
+Let's go a step further. One way to judge how interesting a link might be is by number of people who stars it. 
 
-Let's display the number of likes for each `Post` as well.
+Let's display the number of stars for each `Repo` as well.
 
   {
-  	"title": "New Theme: Libre",
-  	"url": "http://en.blog.wordpress.com/2015/07/02/libre/",
-  	"like_count": 105,
+  	"name": "GolangGDL",
+  	"url": "https://api.github.com/repos/argandas/GolangGDL",
+  	"stargazers_count": 1,
   	...
   }
 
 * Richer formatting (2/3)
 
-Update the `Item` type to include a `Comments` field:
+Update the `Repo` type to include a `Stars` field:
 
-.code Get_started_with_Go/4method.go /type.Post/,/^}/
+.code Get_started_with_Go/4method.go /type.Repo/,/^}/
 
-The new `Likes` field has a "struct tag", a string that annotates the field. Go code can use the `reflect` package to inspect this information at runtime.
+The new `Stars` field has a "struct tag", a string that annotates the field. Go code can use the `reflect` package to inspect this information at runtime.
 
-This tag, `json:"like_count"`, tells the `json` package to decode the `"like_count"` field of the JSON object into the `Likes` field (and the reverse, when encoding).
+This tag, `json:"stargazers_count"`, tells the `json` package to decode the `"stargazers_count"` field of the JSON object into the `Stars` field (and the reverse, when encoding).
 
 * Richer formatting (3/3)
 
 Now the `String` method can be a little more complex:
 
-.code Get_started_with_Go/4method.go /func..p.Post..String/,/^}/
+.code Get_started_with_Go/4method.go /func..r.Repo..String/,/^}/
 
 Observe that, unlike some languages, Go's switch statements do not fall through by default.
 
@@ -443,79 +455,67 @@ Now when we run our program we should see a nicely formatted list of links.
 
 This is useful code. Let's organize it to make it more accessible to others by putting it in an importable package.
 
-Create a new directory inside your `wordpress` directory named `gwpress`, and copy your `main.go` file there.
+Create a new directory inside your `githubapi` directory named `ghapi`, and copy your `main.go` file there.
 
-`wordpress` is the name of the library and `gwpress` as that of the command-line client.
+`githubapi` is the name of the library and `ghapi` as that of the command-line client.
 
-  # Linux
-  $ cd $GOPATH/src/github.com/argandas/wordpress
-  $ mkdir gwpress
-  $ cp main.go gwpress/
-
-  # Windows
-  > cd %GOPATH%/src/github.com/argandas/wordpress
-  > mkdir gwpress
-  > cp main.go gwpress/
+  $ cd $GOPATH/src/github.com/argandas/githubapi
+  $ mkdir ghapi
+  $ cp main.go ghapi/
 
 * A new package (2/4)
 
-Rename the `main.go` inside the `wordpress` directory to `wordpress.go`. (Not necessary; just a convention.)
+Rename the `main.go` inside the `githubapi` directory to `githubapi.go`. (Not necessary; just a convention.)
 
-  # Linux
-  $ mv main.go wordpress.go
-
-  # Windows
-  > mv main.go wordpress.go
+  $ mv main.go githubapi.go
 
 * A new package (3/4)
 
-Change the package statement at the top of `wordpress.go` from `package main` to `package wordpress`.
+Change the package statement at the top of `githubapi.go` from `package main` to `package githubapi`.
 
 It is convention that the package name be the same as the last element of the import path.
 
 The convention makes packages predictable to use:
 
-  import "github.com/argandas/wordpress"
+  import "github.com/argandas/githubapi"
 
   func foo() {
-    r, err := wordpress.Get("url") // "wordpress" here is the package name
+    r, err := githubapi.Get("url") // "githubapi" here is the package name
     // ...
   }
 
 The only strict requirement is that it must not be `package main`.
 
-Also remove the `main` function from `wordpress.go`, and any unused package imports. (The compiler will tell you which packages are unused.)
+Also remove the `main` function from `githubapi.go`, and any unused package imports. (The compiler will tell you which packages are unused.)
 
 * A new package (4/4)
 
-The `wordpress.go` file now looks like this:
+The `githubapi.go` file now looks like this:
 
-  package wordpress
+  package githubapi
   
   import (
     // omitted
   )
   
-  type Response struct {
+  type Response []Repo
+  
+  type Repo struct {
     // omitted
   }
   
-  type Post struct {
+  func (r Repo) String() string {
     // omitted
   }
   
-  func (p Post) String() string {
-    // omitted
-  }
-  
-  func Get(wp string) ([]Post, error) {
+  func Get(user string) ([]Repo, error) {
     // omitted
   }
 
 
-* Using the wordpress package
+* Using the githubapi package
 
-Edit the `gwpress/main.go` file to remove the `Get`, `Item`, and `Response` declarations, import the `wordpress` package, and use the `wordpress.` prefix before the `Get` invocation:
+Edit the `ghapi/main.go` file to remove the `Get`, `Repo`, and `Response` declarations, import the `githubapi` package, and use the `githubapi.` prefix before the `Get` invocation:
 
 .code Get_started_with_Go/main.go
 
@@ -526,18 +526,18 @@ Edit the `gwpress/main.go` file to remove the `Get`, `Item`, and `Response` decl
 
 `Godoc` is the Go documentation tool. It reads documentation directly from Go source files. It's easy to keep documentation and code in sync when they live together in the same place.
 
-Here's our wordpress package when viewed from `godoc`:
+Here's our githubapi package when viewed from `godoc`:
 
-  $ godoc github.com/argandas/wordpress
+  $ godoc github.com/argandas/githubapi
   PACKAGE
-  package wordpress
-      import "github.com/argandas/wordpress"
+  package githubapi
+      import "github.com/argandas/githubapi"
   
   FUNCTIONS
-  func Get(wp string) ([]Post, error)
+  func Get(user string) ([]Post, error)
   
   TYPES
-  type Post struct {
+  type Repo struct {
       Title    string
       URL      string
       Likes int `json:"like_count"`
@@ -555,9 +555,9 @@ In Go, top-level declarations beginning with an uppercase letter are "exported" 
 
 To document the remaining visible names, add a comment directly above their declarations:
 
-.code Get_started_with_Go/wordpress/wordpress.go /Post.describes/,/type/
+.code Get_started_with_Go/githubapi/githubapi.go /Repo.describes/,/type/
 
-.code Get_started_with_Go/wordpress/wordpress.go /Get.fetches/,/func/
+.code Get_started_with_Go/githubapi/githubapi.go /Get.fetches/,/func/
 
 # It is the convention to begin godoc comments with the noun they describe. This allows the text to be displayed in a variety of contexts, not necessarily alongside the declaration itself.
 
@@ -565,7 +565,7 @@ To document the remaining visible names, add a comment directly above their decl
 
 Most importantly, document the package itself by adding a comment to the package clause:
 
-.code Get_started_with_Go/wordpress/wordpress.go /Package.wordpress/,/package/
+.code Get_started_with_Go/githubapi/githubapi.go /Package.githubapi/,/package/
 
 Don't worry about documenting the `String` method, as all Go programmers should be familiar with it and its purpose.
 
@@ -575,61 +575,58 @@ The `godoc` output for our revised package:
 
   PACKAGE
   
-  package wordpress
-      import "github.com/argandas/wordpress"
+  package githubapi
+      import "github.com/argandas/githubapi"
   
-      Package wordpress implements a basic client for the Wordpress API.
+      Package githubapi implements a basic client for the Github API.
   
   FUNCTIONS
   
-  func Get(wp string) ([]Post, error)
-     Get fetches the most recent posts from a Wordpress blog.
+  func Get(user string) ([]Post, error)
+      Get fetches the repositories from a Github user.
   
   TYPES
   
-  type Post struct {
-      Title    string
-      URL      string
-      Likes int `json:"like_count"`
+  type Repo struct {
+    Name string
+    Description string
+    URL   string
+    Stars int `json:"stargazers_count"`
   }
-      Post describes a Wordpress post.
+      Repo describes a Github repository.
   
 # You can also see how it will look on the web by running a local godoc instance
-
 #   $ godoc -http=localhost:8080
-
 # and loading http://localhost:8080/ in your browser.
 
 * Project results
 
-  $ gwpress
-  New Theme: Libre (130 likes)
-  [http://en.blog.wordpress.com/2015/07/02/libre/]
+	$ ghapi
+	go-firmata
+	Arduino Firmata client for golang
+	[https://api.github.com/repos/argandas/go-firmata]
 
-  Reinvented Video for WordPress (327 likes)
-  [http://en.blog.wordpress.com/2015/07/01/videopress-next/]
+	goduino
+	Golang firmata package for Arduino
+	[https://api.github.com/repos/argandas/goduino]
 
-  #LoveWins! LGBTQ Bloggers Make Their Voices Heard (587 likes)
-  [http://en.blog.wordpress.com/2015/06/30/love-wins-lgbtq/]
+	gokemon
+	Golang wrapper for PokeAPI
+	[https://api.github.com/repos/argandas/gokemon]
 
-  July in Blogging U.: Blogging 101 and 201 (340 likes)
-  [http://en.blog.wordpress.com/2015/06/29/july-in-blogging-u-blogging-101-and-201/]
+	GolangGDL
+	GolangGDL Meetup Files
+	[https://api.github.com/repos/argandas/GolangGDL]
 
-  Celebrating 10 Years of WordPress.com &amp; Automattic (856 likes)
-  [http://en.blog.wordpress.com/2015/06/26/celebrating-10-years-of-wordpress-com-automattic/]
-
-  Early Theme Adopters: Gazette (321 likes)
-  [http://en.blog.wordpress.com/2015/06/24/early-theme-adopters-gazette/]
-
-  New Theme: Argent (331 likes)
-  [http://en.blog.wordpress.com/2015/06/18/argent/]
-
-  ...
+	gopher-vector
+	Vector data of gopher
+	[https://api.github.com/repos/argandas/gopher-vector]
+	...
 
 
 * Sharing your work
 
-* Publish the wordpress library
+* Publish the githubapi library
 
 - Add a copyright notice to each file
 - Choose your preferred license
@@ -642,11 +639,11 @@ The `godoc` output for our revised package:
 
 Use the go tool to automatically check out and install Go code:
 
-  $ go get github.com/argandas/wordpress/gwpress
+  $ go get github.com/argandas/githubapi/ghapi
 
-This checks out the repository to `$GOPATH/src/github.com/argandas/wordpress` and installs the binary to `$GOPATH/bin/gwpress`. The `bin` directory is in my PATH, so I can now run:
+This checks out the repository to `$GOPATH/src/github.com/argandas/githubapi` and installs the binary to `$GOPATH/bin/ghapi`. The `bin` directory is in my PATH, so I can now run:
 
-  $ gwpress
+  $ ghapi
 
 The `go get` command can fetch code from
 
@@ -663,7 +660,7 @@ as well as arbitrary Git, Mercurial, Subversion, and Bazaar repositories.
 Some ideas:
 
 - Implement a command-line interface to specify the blog url(s) to query.
-- Expand the wordpress package to support more of the Wordpress API.
+- Expand the githubapi package to support more of the Github API.
 - Learn about Go's concurrency primitives and perform multiple requests in parallel.
 
 * Where to go from here
@@ -680,3 +677,12 @@ Standard library reference:
 
 .link http://golang.org/pkg
 
+* About these slides
+
+This presentation was made using Go's present tool:
+
+.link https://godoc.org/golang.org/x/tools/present
+
+This and all other slides will be available at:
+
+.link https://github.com/argandas/GolangGDL

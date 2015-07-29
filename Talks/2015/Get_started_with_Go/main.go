@@ -4,12 +4,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/argandas/wordpress" // HL
+	"github.com/argandas/githubapi" // HL
 	"log"
 )
 
 func main() {
-	items, err := wordpress.Get("en.blog.wordpress.com") // HL
+	items, err := githubapi.Get("argandas") // HL
 	if err != nil {
 		log.Fatal(err)
 	}
