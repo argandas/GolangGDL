@@ -1,0 +1,62 @@
+# This is a file.
+
+go fmt tool
+
+Hugo Arganda
+http://about.me/argandas
+@argandas
+
+* go fmt your code
+
+Gofmt is a tool that automatically formats Go source code.
+
+.image GoBlitz_gofmt/example.gif
+
+* Gofmt'd code is:
+
+- easier to write: never worry about minor formatting concerns while hacking away,
+- easier to read: when all code looks the same you need not mentally convert others' formatting style into something you can understand.
+- easier to maintain: mechanical changes to the source don't cause unrelated changes to the file's formatting; diffs show only the real changes.
+- uncontroversial: never have a debate about spacing or brace position ever again!
+
+* How to format your code
+
+To format your code, you can use the gofmt tool directly:
+
+  gofmt -w yourcode.go
+
+Or you can use the "go fmt" command:
+
+  go fmt path/to/your/package
+
+Or format all the Go source files in a folder
+
+  go fmt
+
+* Text Editors & gofmt
+
+.link https://github.com/fatih/vim-go Vim plugin
+.link https://github.com/DisposaBoy/GoSublime Sublime plugin
+.link http://goclipse.github.io/ Goclipse (Eclipse IDE for Go)
+
+* Conclusions
+
+.image GoBlitz_gofmt/meme.jpg
+
+* References
+
+.link http://golang.org/cmd/gofmt/
+.link https://blog.golang.org/go-fmt-your-code
+.link http://goclipse.github.io/
+.link https://github.com/DisposaBoy/GoSublime
+.link https://github.com/fatih/vim-go
+
+* About these slides
+
+This presentation was made using Go's present tool:
+
+.link https://godoc.org/golang.org/x/tools/present
+
+This and all other slides will be available at:
+
+.link https://github.com/argandas/GolangGDL
