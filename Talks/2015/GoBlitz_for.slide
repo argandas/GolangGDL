@@ -1,0 +1,56 @@
+All you need is "for"
+
+Hugo Arganda
+http://about.me/argandas
+@argandas
+
+* Go "for" loop
+
+The Go for loop is similar to—but not the same as—C's. It unifies for and while and there is no do-while. There are three forms, only one of which has semicolons.
+
+	// Like a C for
+	for init; condition; post { }
+
+	// Like a C while
+	for condition { }
+
+	// Like a C for(;;)
+	for { }
+
+* Like a C for
+
+.play GoBlitz_for/c_for.go
+
+* Like a C while
+
+.play GoBlitz_for/c_while.go
+
+* Like a C for(;;)
+
+.play GoBlitz_for/c_for_infinite.go
+
+* range
+
+If you're looping over an array, slice, string, or map, or reading from a channel, a range clause can manage the loop.
+
+.play GoBlitz_for/for_range.go
+
+* Example: Loop over a map
+
+.play GoBlitz_for/for_range_map.go
+
+* References
+
+.link https://golang.org/doc/effective_go.html#for
+.link https://tour.golang.org/flowcontrol/1
+.link http://www.goconejemplos.com/for
+
+* About these slides
+
+This presentation was made using Go's present tool:
+
+.link https://godoc.org/golang.org/x/tools/present
+
+This and all other slides will be available at:
+
+.link https://github.com/argandas/GolangGDL

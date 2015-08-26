@@ -7,3 +7,4 @@
 ## [Golang GDL • 26 de Agosto](http://www.meetup.com/es/GolangGDL/events/224618349/)
 
 - Go Blitz: go fmt tool [[slides]](http://go-talks.appspot.com/github.com/argandas/GolangGDL/Talks/2015/GoBlitz_gofmt.slide)
+- Go Blitz: for loop [[slides]](http://go-talks.appspot.com/github.com/argandas/GolangGDL/Talks/2015/GoBlitz_for.slide)
