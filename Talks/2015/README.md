@@ -8,3 +8,8 @@
 
 - Go Blitz: go fmt tool [[slides]](http://go-talks.appspot.com/github.com/argandas/GolangGDL/Talks/2015/GoBlitz_gofmt.slide)
 - Go Blitz: for loop [[slides]](http://go-talks.appspot.com/github.com/argandas/GolangGDL/Talks/2015/GoBlitz_for.slide)
+
+## [Golang GDL • 30 de Septiembre](http://www.meetup.com/es/GolangGDL/events/224962267/)
+
+- Go Blitz: errors [[slides]](http://go-talks.appspot.com/github.com/argandas/GolangGDL/Talks/2015/GoBlitz_errors.slide)
+- Go Blitz: regexp [[slides]](http://go-talks.appspot.com/github.com/argandas/GolangGDL/Talks/2015/GoBlitz_regexp.slide)

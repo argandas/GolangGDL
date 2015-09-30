@@ -1,0 +1,67 @@
+"^Re[a-z]+xp$" in Go
+
+Hugo Arganda
+http://about.me/argandas
+@argandas
+
+* Life is better when using Regexp
+
+Go offers built-in support for regular expressions. 
+
+  import "regexp"
+
+.link https://golang.org/pkg/regexp/
+
+.image GoBlitz_regexp/regexp_meme.jpg 300 _
+
+* Example: Bare Minimum
+
+This tests whether a pattern matches a string.
+
+.play GoBlitz_regexp/example1.go
+
+* Example: Compile
+
+Many methods are available on these structs. Here's a match test like we saw earlier.
+
+.play GoBlitz_regexp/example2.go
+
+* Example: Find
+
+This finds the match for the regexp.
+
+.play GoBlitz_regexp/example3.go
+
+* Example: Find all
+
+The `All` variants of these functions apply to all matches in the input, not just the first. For example to find all matches for a regexp.
+
+.play GoBlitz_regexp/example4.go
+
+* Example: Must Compile
+
+MustCompile is like Compile but panics if the expression cannot be parsed. It simplifies safe initialization of global variables holding compiled regular expressions.
+
+.play GoBlitz_regexp/example5.go
+
+* Example: Replace
+
+The regexp package can also be used to replace subsets of strings with other values.
+
+.play GoBlitz_regexp/example6.go
+
+* References
+
+.link https://golang.org/pkg/regexp/
+.link https://gobyexample.com/regular-expressions
+.link https://en.wikipedia.org/wiki/Regular_expression
+
+* About these slides
+
+This presentation was made using Go's present tool:
+
+.link https://godoc.org/golang.org/x/tools/present
+
+This and all other slides are available at:
+
+.link https://github.com/argandas/GolangGDL

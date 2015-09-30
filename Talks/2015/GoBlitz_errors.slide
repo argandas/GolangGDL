@@ -1,0 +1,127 @@
+Error handling and Go
+
+Hugo Arganda
+http://about.me/argandas
+@argandas
+
+* Errors are values
+
+Values can be programmed, and since errors are values, errors can be programmed.
+
+  err := DoSomethingWrong()
+  if err != nil {
+    // You did something wrong
+    return err
+  }
+
+.image GoBlitz_errors/errors_meme.jpg 300 _
+
+* The error type
+
+The error type is an interface type. An error variable represents any value that can describe itself as a string.
+
+  type error interface {
+    Error() string
+  }
+
+The most commonly-used error implementation is the errors package's unexported errorString type.
+
+  // errorString is a trivial implementation of error.
+  type errorString struct {
+      s string
+  }
+
+  func (e *errorString) Error() string {
+      return e.s
+  }
+
+* IF initialization statement
+
+IF accepts an initialization statement, it's common to see one used to set up a local variable.
+
+  if err := DoSomethingWrong(); err != nil {
+    return err
+  }
+
+* Custom errors
+
+Creating custom errors is really easy, you 3 ways to create new error.
+
+- Using the "New" method from "errors" package
+
+  err := errors.New("You said she looks fat")
+
+- Using the "New" method from "errors" package
+
+  err := fmt.Errorf("You have sent a SMS to %s while drunk", "your ex")
+
+- Create your own data type which meet the error interface
+
+  type customError struct {
+    Data string
+  }
+
+  func (c customError) Error() string { return c.Data }
+
+* Handling multiple errors
+
+If your code uses a lot of funtions which means it may have more than one error source, the best way to handle that situation is to return as soon as an error appears.
+
+  func DoSomething() error {
+    f, err := os.Open("myFile")
+    if err != nil {
+        return err
+    }
+    // Process the file ...
+    d, err := f.Stat()
+    if err != nil {
+        return err
+    }
+    // Process the file ...
+    if err := f.Close(); err != nil {
+      return err
+    }
+    // Success!
+    return nil
+  }
+
+* Redeclaration and reassignment (1/2)
+
+An aside: The last example in the previous section demonstrates a detail of how the := short declaration form works. The declaration that calls os.Open reads,
+
+  f, err := os.Open(name)
+
+This statement declares two variables, f and err. A few lines later, the call to f.Stat reads,
+
+  d, err := f.Stat()
+
+which looks as if it declares d and err.
+
+Notice, though, that err appears in both statements. This duplication is legal: err is declared by the first statement, but only re-assigned in the second. 
+
+* Redeclaration and reassignment (2/2)
+
+In a := declaration a variable v may appear even if it has already been declared, provided:
+
+- this declaration is in the same scope as the existing declaration of v (if v is already declared in an outer scope, the declaration will create a new variable §),
+- the corresponding value in the initialization is assignable to v, and
+- there is at least one other variable in the declaration that is being declared anew.
+
+* References
+
+.link https://golang.org/pkg/errors/
+.link http://blog.golang.org/error-handling-and-go
+.link https://blog.golang.org/errors-are-values
+.link http://www.goinggo.net/2014/10/error-handling-in-go-part-i.html
+.link http://stackoverflow.com/questions/16963298/golang-error-handling-techniques
+.link https://golang.org/doc/effective_go.html#redeclaration
+
+* About these slides
+
+This presentation was made using Go's present tool:
+
+.link https://godoc.org/golang.org/x/tools/present
+
+This and all other slides are available at:
+
+.link https://github.com/argandas/GolangGDL
